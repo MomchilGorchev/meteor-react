@@ -4,8 +4,15 @@ App = React.createClass({
     mixins: [ReactMeteorData],
 
     getMeteorData(){
+
+        let query = {};
+
+        if(this.state.hideCompleted){
+            query = {checked: {$ne: true}};
+        }
+
         return {
-            tasks: Tasks.find({}, {sort: {createdAt: -1}}).fetch()
+            tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch()
         };
     },
 
@@ -35,8 +42,18 @@ App = React.createClass({
         });
 
         el.value = '';
+    },
 
+    getInitialState() {
+        return {
+            hideCompleted: false
+        }
+    },
 
+    toggleHideCompleted(){
+        this.setState({
+            hideCompleted: ! this.state.hideCompleted
+        })
     },
 
     render() {
@@ -45,6 +62,16 @@ App = React.createClass({
                 <header>
                     <h1>Todo List</h1>
                 </header>
+
+                <label className="hide-completed">
+                    <input
+                        type="checkbox"
+                        readOnly={true}
+                        checked={this.state.hideCompleted}
+                        onClick={this.toggleHideCompleted} />
+                    Hide Completed Tasks
+                </label>
+
                 <form className="new-task" onSubmit={this.handleSubmit} >
                     <input
                         type="text"
