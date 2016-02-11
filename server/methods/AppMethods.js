@@ -9,6 +9,13 @@ Meteor.startup(() => {
          * Save new task
          */
         saveTask(text){
+
+            // If no user logged in throw error
+            if(!Meteor.userId()){
+
+                throw new Meteor.Error(401, 'Not authorised');
+            }
+
             // If input
             if(text){
 
@@ -47,16 +54,14 @@ Meteor.startup(() => {
         /**
          * Toggle checked/completed property
          */
-        toggleChecked(id){
+        toggleChecked(id, isChecked){
 
             // If input
             if(id){
-
-                // Get current state
-                var checked = Tasks.findOne(id).checked;
+                
                 // Set the checked property to the opposite of its current value
                 Tasks.update(id, {
-                    $set: {checked: !checked}
+                    $set: {checked: isChecked}
                 });
                 return true;
 
