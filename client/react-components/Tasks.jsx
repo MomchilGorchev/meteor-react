@@ -8,13 +8,21 @@ Task = React.createClass({
 
     toggleChecked() {
         // Set the checked property to the opposite of its current value
-        Tasks.update(this.props.task._id, {
-            $set: {checked: ! this.props.task.checked}
+        Meteor.call('toggleChecked', this.props.task._id, (err, res) =>{
+
+            if(err){
+                console.log(err);
+            }
+
         });
     },
 
     deleteThisTask() {
-        Tasks.remove(this.props.task._id);
+        Meteor.call('deleteTask', this.props.task._id, (err, res) => {
+            if(err){
+                console.log(err);
+            }
+        });
     },
 
     render() {

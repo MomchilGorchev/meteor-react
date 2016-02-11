@@ -38,26 +38,22 @@ App = React.createClass({
         let el = React.findDOMNode(this.refs.textInput);
         let text = el.value.trim();
 
-        Tasks.insert({
-            text,
-            createdAt: Date.now(),
-            owner: Meteor.userId(),
-            username: Meteor.user().username
-        });
+        Meteor.call('saveTask', text, (err, res) => {
 
-        el.value = '';
+            err ? console.log(err) : res ? el.value = '' : console.log(res);
+        });
     },
 
     getInitialState() {
         return {
             hideCompleted: false
-        }
+        };
     },
 
     toggleHideCompleted(){
         this.setState({
             hideCompleted: ! this.state.hideCompleted
-        })
+        });
     },
 
     render() {
