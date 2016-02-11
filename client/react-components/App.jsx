@@ -9,7 +9,7 @@ App = React.createClass({
 
         // Create buffer variable
         let query = {};
-        
+
         // Show only non-completed if the checkbox is checked
         if(this.state.hideCompleted){
             query = {checked: {$ne: true}};
@@ -40,21 +40,10 @@ App = React.createClass({
         // Get input value
         let text = el.value.trim();
 
-<<<<<<< Updated upstream:client/react-components/App.jsx
         Meteor.call('saveTask', text, (err, res) => {
 
             err ? console.log(err) : res ? el.value = '' : console.log(res);
         });
-=======
-        // Insert into collection
-        Tasks.insert({
-            text,
-            createdAt: Date.now()
-        });
-
-        // Reset input field
-        el.value = '';
->>>>>>> Stashed changes:App.jsx
     },
 
     // Default switch state
