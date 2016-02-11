@@ -1,16 +1,21 @@
 // App component - represents the whole app
 App = React.createClass({
 
+    // Make use of meteor reactive data source
     mixins: [ReactMeteorData],
 
+    // Geter method for the collection data
     getMeteorData(){
 
+        // Create buffer variable
         let query = {};
-
+        
+        // Show only non-completed if the checkbox is checked
         if(this.state.hideCompleted){
             query = {checked: {$ne: true}};
         }
 
+        // Return necessary data
         return {
             tasks: Tasks.find(query, {sort: {createdAt: -1}}).fetch(),
             incompleteCount: Tasks.find({checked: {$ne: true}}).count(),
@@ -18,44 +23,55 @@ App = React.createClass({
         };
     },
 
-    getTasks() {
-        return [
-            { _id: 1, text: "This is task 1" },
-            { _id: 2, text: "This is task 2" },
-            { _id: 3, text: "This is task 3" }
-        ];
-    },
-
+    // Render individual tasks
     renderTasks() {
         return this.data.tasks.map((task) => {
+            // Pass props to the child class
             return <Task key={task._id} task={task} />;
         });
     },
 
+    // Event handler for when new taks is created
     handleSubmit(event){
         event.preventDefault();
 
+        // Cache element
         let el = React.findDOMNode(this.refs.textInput);
+        // Get input value
         let text = el.value.trim();
 
+<<<<<<< Updated upstream:client/react-components/App.jsx
         Meteor.call('saveTask', text, (err, res) => {
 
             err ? console.log(err) : res ? el.value = '' : console.log(res);
         });
+=======
+        // Insert into collection
+        Tasks.insert({
+            text,
+            createdAt: Date.now()
+        });
+
+        // Reset input field
+        el.value = '';
+>>>>>>> Stashed changes:App.jsx
     },
 
+    // Default switch state
     getInitialState() {
         return {
             hideCompleted: false
         };
     },
 
+    // Element state setter
     toggleHideCompleted(){
         this.setState({
             hideCompleted: ! this.state.hideCompleted
         });
     },
 
+    // Render the component
     render() {
         return (
             <div className="container">
